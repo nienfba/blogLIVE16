@@ -1,0 +1,19 @@
+<?php
+
+const DB_DSN    = 'mysql:host=localhost;dbname=;charset=UTF8';
+const DB_USER   = '';
+const DB_PASS   = '';
+
+const DB_PREFIXE = 'b_';
+
+
+
+/** FILES */
+//Répertoire chemin complet vers le blog (pour l'upload)
+define('UPLOADS_DIR', realpath(dirname(__FILE__)."/../").'/img/uploads/');
+
+//URL complète vers le répertoire upload (pour l'affichage des images dans l'HTML)
+const UPLOADS_URL      = '';
+
+
+const ROLES = ['ROLE_ADMIN'=>'Administrateur','ROLE_AUTHOR'=>'Auteur'];

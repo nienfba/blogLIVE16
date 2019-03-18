@@ -1,0 +1,68 @@
+
+
+<form action="<?php if(is_null($id)):?>addArticle.php<?php else:?>editArticle.php<?php endif;?>" method="POST" enctype="multipart/form-data">
+  <?php if(isset($errorForm) && count($errorForm)>0):?>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <?php foreach($errorForm as $error):?>
+          <li class="erreur"><?=$error;?></li>
+        <?php endforeach;?>
+    </div>
+  <?php endif;?>
+    
+  <?php if(!is_null($id)):?>
+    <input type="hidden" value="<?=$id?>" name="id">
+  <?php endif;?>
+
+  <fieldset>
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input type="text" class="form-control" id="title" name="title" value="<?=$titleArticle?>">
+      <small id="titleHelp" class="form-text text-muted">Saisissez un titre pour votre article</small>
+    </div>
+    <div class="form-group">
+      <label for="content">Contenu</label>
+      <textarea class="form-control" id="content" name="content" rows="3"><?=$contentArticle?></textarea>
+      <small id="catHelp" class="form-text text-muted">Contenu de l'article</small>
+    </div>
+    <div class="form-group row">
+      <label for="date" class="col-sm-4 col-form-label">Date et heure de publication</label>
+      <div class="col-4">
+        <input type="date" class="form-control" id="date" name="date" value="<?=$datePublished->format('Y-m-d')?>">
+      </div>
+      <div class="col-4">
+        <input type="time" class="form-control" id="time" name="time"  value="<?=$datePublished->format('H:m')?>">
+      </div>
+      
+    </div>
+    <div class="form-group">
+      <label for="categorie">Catégorie de l'article</label>
+      <select class="form-control" id="categorie" name="categorie">
+        <?php foreach($categories as $categorie):?>
+          <option value="<?=$categorie['c_id']?>" <?php if($catArticle == $categorie['c_id']):?>selected<?php endif;?>><?=$categorie['c_title']?></option>
+        <?php endforeach;?>
+      </select>
+       <small id="catHelp" class="form-text text-muted">Sélectionnez une catégorie pour l'article</small>
+    </div>
+    <div class="form-group">
+      <label for="picture">Image de l'article</label>
+      <input type="file" class="form-control-file" id="picture" name="picture" aria-describedby="fileHelp">
+      <?php if($pictureArticle != '' &&  $pictureArticle != null):?>
+        <input type="hidden" name="oldPicture" value="<?=$pictureArticle?>">
+      <?php endif;?>
+      <?php if($pictureDisplay):?>
+        <img src="<?=UPLOADS_URL.'articles/'.$pictureArticle?>" width="200">
+      <?php endif;?>
+      <small id="fileHelp" class="form-text text-muted">Sélectionnez un fichier sur votre ordinateur</small>
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+<input type="checkbox" class="custom-control-input" name="valide"  id="valide" <?php if($valideArticle == true):?>checked=""<?php endif;?>>
+        <label class="custom-control-label" for="valide">Publier l'article</label>
+        <small id="publieHelp" class="form-text text-muted">L'article sera mis en brouillon si vous décochez cette case !</small>
+      </div>
+    </div>
+    <a href="listeArticle.php" class="btn btn-outline-primary">Annuler</a>
+    <button type="submit" class="btn btn-primary"><?php if(is_null($id)):?>Créer l'article<?php else:?>Modifier l'article<?php endif;?></button>
+  </fieldset>
+</form>

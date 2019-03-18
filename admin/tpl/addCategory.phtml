@@ -1,0 +1,34 @@
+<form action="<?php if(is_null($id)):?>addCategory.php<?php else:?>editCategory.php<?php endif;?>" method="POST" enctype="multipart/form-data">
+  <?php if(isset($errorForm) && count($errorForm)>0):?>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        <?php foreach($errorForm as $error):?>
+          <li class="erreur"><?=$error;?></li>
+        <?php endforeach;?>
+    </div>
+  <?php endif;?>
+    
+  <?php if(!is_null($id)):?>
+    <input type="hidden" value="<?=$id?>" name="id">
+  <?php endif;?>
+
+  <fieldset>
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input type="text" class="form-control" id="title" name="title" value="<?=$titleCategory?>">
+      <small id="titleHelp" class="form-text text-muted">Saisissez un titre pour votre category</small>
+    </div>
+    <div class="form-group">
+      <label for="categorie">Catégorie parent</label>
+      <select class="form-control" id="categorie" name="categorie">
+        <option value="">Aucune</option>
+        <?php foreach($categories as $categorie):?>
+          <option value="<?=$categorie['c_id']?>" <?php if($catParent == $categorie['c_id']):?>selected<?php endif;?>><?=$categorie['c_title']?></option>
+        <?php endforeach;?>
+      </select>
+       <small id="catHelp" class="form-text text-muted">Sélectionnez une catégorie parent</small>
+    </div>
+    <a href="listeArticle.php" class="btn btn-outline-primary">Annuler</a>
+    <button type="submit" class="btn btn-primary"><?php if(is_null($id)):?>Créer la catégorie<?php else:?>Modifier la catégorie<?php endif;?></button>
+  </fieldset>
+</form>
