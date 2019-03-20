@@ -4,12 +4,12 @@ session_start();
  * 1. Récupérer tous les articles en bdd
  * 2. Afficher les articles ! 
  */
-
 /**On inclu d'abord le fichier de configuration */
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
+userIsConnected('ROLE_ADMIN');
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = '';      //vue qui sera affichée dans le layout
@@ -39,6 +39,8 @@ try
             if($sth->fetchColumn() > 0)
             {
                 addFlashBag('L\'utilisateur a des articles associé. Il ne peut pas être supprimé !','warning');
+                addFlashBag('Youpi!','danger');
+                addFlashBag('Hello wolrd !');
             }
             else
             {

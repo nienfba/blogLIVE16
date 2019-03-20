@@ -10,6 +10,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
+userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = '';      //vue qui sera affichée dans le layout
@@ -30,15 +31,22 @@ try
 
         if($category)
         {
-            //on a bien un utilisateur en base avec cet id
-            //On vérifie si l'utilisateur n'a pas d'articles associé !
-            //Sinon on empêche sa 
+            //on a bien une catégorie en base avec cet id
+            //On vérifie s'il n'y a pas d'article associé
             $sth = $bdd->prepare('SELECT COUNT(a_id) FROM '.DB_PREFIXE.'article WHERE a_categorie = :id');
             $sth->execute(['id'=>$id]);
+
+            //On vérifie s'il n'y a pas de catégorie enfants
+            $sth2 = $bdd->prepare('SELECT COUNT(c_id) FROM '.DB_PREFIXE.'categorie WHERE c_parent = :id');
+            $sth2->execute(['id'=>$id]);
 
             if($sth->fetchColumn() > 0)
             {
                 addFlashBag('La catégorie a des articles associés. Elle ne peut pas être supprimée !','warning');
+            }
+            elseif($sth2->fetchColumn() > 0)
+            {
+                addFlashBag('La catégorie a des catégories enfants. Elle ne peut pas être supprimée !','warning');
             }
             else
             {

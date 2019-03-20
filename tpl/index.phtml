@@ -1,0 +1,13 @@
+<section>
+    <?php foreach($articles as $article):?>
+        <article>
+            <?php if($article['a_picture'] != null):?><img class="img-thumbnail" width="150" src="<?=UPLOADS_URL.'articles/'.$article['a_picture']?>"><?php endif;?>
+            <h2><?=$article['a_title']?></h2>
+            <p><?=(new DateTime($article['a_date_published']))->format('d/m/Y H:i:s')?></p>
+            <p><?=mb_strimwidth(strip_tags($article['a_content']),0,400,'...')?></p>
+            <p>Catégorie : <?=$article['c_title']?></p>
+            <p>Auteur : <?=$article['u_firstname'].' '.$article['u_lastname']?></p>
+            <a href="detailArticle.php?id=<?=$article['a_id']?>">Lire</a>
+        </article>
+    <?php endforeach;?>
+</section>

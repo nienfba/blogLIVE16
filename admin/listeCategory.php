@@ -6,6 +6,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
+userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = 'listeCategory.phtml';      //vue qui sera affichée dans le layout
@@ -15,13 +16,16 @@ $menuSelected = 'listeCategory';   //menu qui sera sélect dans la nav du layout
 try
 {
     $bdd = connexion();
-    $sth = $bdd->prepare('SELECT c1.c_id, c1.c_title, c2.c_title as parent, COUNT(a.a_id) as articles  FROM '.DB_PREFIXE.'categorie c1 LEFT JOIN '.DB_PREFIXE.'categorie c2 ON c1.c_parent=c2.c_id LEFT JOIN '.DB_PREFIXE.'article a ON c1.c_id = a.a_categorie GROUP BY c1.c_id ORDER BY c1.c_parent');
+    $sth = $bdd->prepare('SELECT c1.c_id, c1.c_title, c2.c_title as parent, c1.c_parent, COUNT(a.a_id) as articles  FROM '.DB_PREFIXE.'categorie c1 LEFT JOIN '.DB_PREFIXE.'categorie c2 ON c1.c_parent=c2.c_id LEFT JOIN '.DB_PREFIXE.'article a ON c1.c_id = a.a_categorie GROUP BY c1.c_id,c2.c_id ORDER BY c1.c_title, c1.c_parent');
     $sth->execute();
+    $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
 
+    /**  On va créer un tableau des catégorie hiérarchisée pour afficher des ul>li hiérarchiques (arbre des catégories parent/enfants)
+    * Utilisation d'une fonction récursive (pour l'exemple algorithmique !).
+    */
+    $orderedCategories = orderCategories($categories);
 
     $flashbag = getFlashBag();
-   
-    $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 }
 catch(PDOException $e)

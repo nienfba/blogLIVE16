@@ -4,11 +4,14 @@ session_start();
  * 1. Afficher le formulaire d'ajout
  * 2. Récupérer les données du formulaire et les enregistrer ou afficher les erreurs 
  */
-
 /**On inclu d'abord le fichier de configuration */
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+
+userIsConnected('ROLE_ADMIN');
+
+
 
 
 /** On définie nos variables nécessaire pour la vue et le layout */
@@ -58,11 +61,15 @@ try
 
         if(strlen($passwordUser) < 8)
             $errorForm[] = 'Le mot de passe doit comporter 8 caractères minimum !';
+
+        if(!filter_var($emailUser,FILTER_VALIDATE_EMAIL))
+            $errorForm[] = 'L\'email n\'est pas correcte !';
+
         
         //On vérifie si l'utilisateur n'est pas déjà dans la base avec cet email (champ unique email !!)
 
         /** On vérifie qu'un utilisateur n'est pas déjà dans la base de données*/
-        $sth = $dbh->prepare('SELECT u_email FROM '.DB_PREFIXE.'user WHERE u_email = :email');
+        $sth = $bdd->prepare('SELECT u_email FROM '.DB_PREFIXE.'user WHERE u_email = :email');
         $sth->bindValue('email',$emailUser,PDO::PARAM_STR);
         $user = $sth->fetch(PDO::FETCH_ASSOC);
         if($user != false)

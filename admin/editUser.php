@@ -10,6 +10,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
+userIsConnected('ROLE_ADMIN');
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = 'addUser.phtml';      //vue qui sera affichée dans le layout
@@ -75,8 +76,9 @@ try
 
         if($passwordUser != '' && $passwordUser != $passwordConfUser)
             $errorForm[] = 'Le mot de passe ou sa confimation ne sont pas corrects !';
-
-        if(strlen($passwordUser) < 8)
+        
+        
+        if($passwordUser != '' && strlen($passwordUser) < 8)
             $errorForm[] = 'Le mot de passe doit comporter 8 caractères minimum !';
         
         //On vérifie si l'utilisateur n'est pas déjà dans la base avec cet email (champ unique email !!)

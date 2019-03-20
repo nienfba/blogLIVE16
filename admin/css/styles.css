@@ -12,3 +12,7 @@
 {
     color:red;
 }
+
+.list-group li>ul>li {
+  border:0px;
+}

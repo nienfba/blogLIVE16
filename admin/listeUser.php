@@ -5,10 +5,13 @@ session_start();
  * 2. Afficher les articles ! 
  */
 
+ 
 /**On inclu d'abord le fichier de configuration */
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+
+userIsConnected('ROLE_ADMIN');
 
 
 /** On définie nos variables nécessaire pour la vue et le layout */
@@ -19,7 +22,9 @@ $menuSelected = 'listeUser';   //menu qui sera sélect dans la nav du layout
 try
 {
     $bdd = connexion();
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'user');
+    $sth = $bdd->prepare('SELECT u_id,u_lastname,u_firstname,u_email,u_role,u_valide, COUNT(a_title) as articles 
+    FROM '.DB_PREFIXE.'user 
+    LEFT JOIN '.DB_PREFIXE.'article ON u_id=a_author GROUP BY u_id');
     $sth->execute();
 
 

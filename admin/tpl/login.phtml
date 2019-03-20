@@ -13,6 +13,7 @@
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
+ 
     <!-- Tabs Titles -->
 
     <!-- Icon -->
@@ -20,10 +21,30 @@
       <i class="icon-user"></i>
     </div>
 
+    <?php if(isset($errorForm) && count($errorForm)>0):?>
+      <div class="alert alert-danger" role="alert">
+        <ul>
+          <?php foreach($errorForm as $error):?>
+            <li class="erreur"><?=$error;?></li>
+          <?php endforeach;?>
+      </div>
+    <?php endif;?>
+
+    <?php if(isset($flashbag) && $flashbag!=false):?>
+      
+          <?php foreach($flashbag as $message):?>
+              <div class="alert alert-dismissible alert-<?=$message['level']?>" role="alert">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  <p><?=$message['message']?></p>
+                </div>
+          <?php endforeach;?>
+      
+    <?php endif;?>
+
     <!-- Login Form -->
     <form method="POST" action="login.php">
-      <input type="text" id="login" class="fadeIn second" name="email" placeholder="Email">
-      <input type="text" id="password" class="fadeIn third" name="password" placeholder="Mot de passe">
+      <input type="text" id="login" class="fadeIn second" name="email" placeholder="Email" value="<?=$email?>">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Mot de passe">
       <input type="submit" class="fadeIn fourth" value="Log In">
     </form>
 

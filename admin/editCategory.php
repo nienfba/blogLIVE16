@@ -10,7 +10,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
-
+userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = 'addCategory.phtml';      //vue qui sera affichée dans le layout
@@ -65,14 +65,11 @@ try
         /* Récupération des données de l'article */
         $id = $_POST['id'];
         $titleCategory = trim($_POST['title']);
-        $catParent = $_POST['categorie'];
+        $catParent = ($_POST['categorie']=='')?null:$_POST['categorie'];
 
         //le formulaire est posté
         if($titleCategory == '')
             $errorForm[] = 'Le titre ne peut-être vide !';
-
-        if($catParent == '')
-            $catParent = null;
 
         if(count($errorForm) == 0)
         {
@@ -82,7 +79,7 @@ try
             //Liage (bind) des valeurs
             $sth->bindValue('id',$id,PDO::PARAM_INT);
             $sth->bindValue('title',$titleCategory,PDO::PARAM_STR);
-            $sth->bindValue('parent',$catParent,PDO::PARAM_STR);
+            $sth->bindValue('parent',$catParent,PDO::PARAM_INT);
             if($sth->execute())
                 addFlashBag('La catégorie a bien été modifiée');
             else

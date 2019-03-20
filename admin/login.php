@@ -6,18 +6,51 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
-
-
+$email = '';
 
 /** On test si on réceptionne les données de login */
 try
 {
+    $flashbag = getFlashBag();
+    
     if(array_key_exists('email',$_POST))
     {
-        //on vérifie si l'utilisateur existe en base (email)
-        //on compare ensuite sont mot de passe avec celui en base (password_verify())
-        //si tout est ok on créer 2 index dans $_SESSION - $_SESSION['connected'] = true; $_SESSION['user'] = ['id'=>...,'name'=>...,'role'=>...];
-        //sinon on affiche de nouveau le formulaire avec un message d'erreur (Impossible de se connecter ! Vérfier login + mot de passe)
+        $errorForm = []; //Pas d'erreur pour le moment sur les données
+        
+        $email = $_POST['email'];
+        $password =$_POST['password'];
+
+        
+        if(!filter_var($email,FILTER_VALIDATE_EMAIL) || $password=='')
+            $errorForm[] = 'Merci de vérifier vos identifiants !';
+
+        
+        if(count($errorForm)==0)
+        {
+            $bdd = connexion();
+            $sth = $bdd->prepare('SELECT u_id,u_lastname,u_firstname,u_email,u_role,u_valide,u_password
+            FROM '.DB_PREFIXE.'user 
+            WHERE u_email = :email AND u_valide=1');
+            $sth->bindValue('email', $email,PDO::PARAM_STR);
+            $sth->execute();
+            $user =  $sth->fetch(PDO::FETCH_ASSOC);
+
+            if(password_verify($password,$user['u_password']))
+            {
+                //Connexion de l'utilisateur
+                $_SESSION['connected'] = true;
+                $_SESSION['user'] = ['id'=>$user['u_id'],'name'=>$user['u_firstname'].' '.$user['u_lastname'],'role'=>$user['u_role']];
+                
+                header('Location:index.php');
+                exit();
+            
+            }
+            else
+            {
+                $errorForm[] = 'Merci de vérifier vos identifiants !';
+            }
+        }
+        
     }
     
 

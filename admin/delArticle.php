@@ -10,6 +10,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
+userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = '';      //vue qui sera affichée dans le layout

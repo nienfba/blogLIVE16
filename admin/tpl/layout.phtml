@@ -60,10 +60,9 @@
                     </div>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+
+            Bienvenue <?=$_SESSION['user']['name']?> - <a href="logout.php" class="btn btn-light">Logout</a>
+
         </div>
     </nav>
     <div class="container mb-4">
@@ -73,7 +72,7 @@
             <?php foreach($flashbag as $message):?>
                 <div class="alert alert-dismissible alert-<?=$message['level']?>" role="alert">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <?=$message['message']?>
+                    <p><?=$message['message']?></p>
                  </div>
             <?php endforeach;?>
        
@@ -133,6 +132,7 @@
         tinymce.init({
             selector: 'textarea',
             height: 500,
+            relative_urls: false,
             plugins: [
                 "advlist autolink lists link image charmap print preview anchor",
                 "searchreplace visualblocks code fullscreen",
@@ -141,7 +141,8 @@
             toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
             content_css: [
                 'css/bootstrap.min.css',
-            ]
+            ],
+            images_upload_url: '<?=URL?>/lib/uploadTinyMce.php'
         });
 
         

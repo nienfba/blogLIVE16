@@ -10,6 +10,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 
+userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
 $vue = 'addArticle.phtml';      //vue qui sera affichée dans le layout
@@ -51,6 +52,9 @@ try
     $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie');
     $sth->execute();
     $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    //On ordonne les catégories par ordre hirarchique avec un niveau (ATTENTION niveau avancé...)
+    $categories = orderCategoriesLevel($categories);
 
 
     /**S'il a des données en entrée */
