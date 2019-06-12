@@ -17,9 +17,9 @@ To begin using this blog system :
 
 ## Usage Admin
 * BackOffice :
-Login to http://localhost/blog/admin with email : login@user.fr and password : 12345678
+Login to http://localhost/blogV2/admin with email : login@user.fr and password : 12345678
 * FrontOffice :
-Connect to http://localhost/blog/
+Connect to http://localhost/blogV2/
 
 ## Copyright and License
 
