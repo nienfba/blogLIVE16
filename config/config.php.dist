@@ -1,18 +1,22 @@
 <?php
-
-const DB_DSN    = 'mysql:host=localhost;dbname=;charset=UTF8';
-const DB_USER   = '';
-const DB_PASS   = '';
-
+//Update this value with your own configuration
+const DB_HOST = 'localhost';
+const DB_TYPE = 'mysql';
+const DB_NAME = 'blog';
+const DB_CHARSET = 'utf8';
+const DB_USER = '';
+const DB_PASSWORD = '';
 const DB_PREFIXE = 'b_';
 
 /** FILES ET URL */
-const URL = 'http://localhost:8080/3WA-MA20/php/blog/';
+//Change with yout complète URL to blog
+const URL = 'http://localhost/blog/';
 
-//Répertoire chemin complet vers le blog (pour l'upload)
+//Complete repository acces to uploads files - Don't change this value)
 define('UPLOADS_DIR', realpath(dirname(__FILE__)."/../").'/img/uploads/');
 
-//URL complète vers le répertoire upload (pour l'affichage des images dans l'HTML)
+//Complete URL acces to upload repository (pour l'affichage des images dans l'HTML)
 const UPLOADS_URL = URL.'/img/uploads/';
 
+//Don't change this value - Used to evaluate the role of each user connected to the backend
 const ROLES = ['ROLE_ADMIN'=>'Administrateur','ROLE_AUTHOR'=>'Auteur'];
