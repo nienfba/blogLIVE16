@@ -27,6 +27,29 @@ try
         
         if(count($errorForm)==0)
         {
+            
+           /*  $user = new User();
+            $user->loadByEmail($email);
+
+            if(password_verify($password,$user->getPassword()))
+            {
+                //Connexion de l'utilisateur
+                $_SESSION['connected'] = true;
+                $_SESSION['user'] = ['id'=>$user->getId(),'name'=>$user->getFirstName().' '.$user->getLastName(),'role'=>$user->getRole()];
+                
+                header('Location:index.php');
+                exit();
+            
+            }
+            else
+            {
+                $errorForm[] = 'Merci de vérifier vos identifiants !';
+            } */
+
+
+
+            
+             
             $bdd = connexion();
             $sth = $bdd->prepare('SELECT u_id,u_lastname,u_firstname,u_email,u_role,u_valide,u_password
             FROM '.DB_PREFIXE.'user 
@@ -35,7 +58,7 @@ try
             $sth->execute();
             $user =  $sth->fetch(PDO::FETCH_ASSOC);
 
-            if(password_verify($password,$user['u_password']))
+             if(password_verify($password,$user['u_password']))
             {
                 //Connexion de l'utilisateur
                 $_SESSION['connected'] = true;

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lora&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/dataTable/datatables.min.js"></script>
+    <script src="js/tinyMCE/tinymce.min.js"></script>
+    <title>Admin du blog</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">gAME & cODE</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <?php if($menuSelected == 'home'):?>active<?php endif;?>">
+        <a class="nav-link" href="index.php">Accueil <?php if($menuSelected == 'home'):?><span
+            class="sr-only">(current)</span><?php endif;?></a>
+      </li>
+      <li
+        class="nav-item dropdown <?php if($menuSelected == 'addArticle' || $menuSelected == 'listeArticle' || $menuSelected == 'editArticle'):?>active<?php endif;?>">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarArticle" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Articles <?php if($menuSelected == 'addArticle' || $menuSelected == 'listeArticle' || $menuSelected == 'editArticle'):?><span class="sr-only">(current)</span><?php endif;?>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarArticle">
+          <a class="dropdown-item <?php if($menuSelected == 'listeArticle'):?>active<?php endif;?>"
+            href="listeArticle.php">Liste</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item  <?php if($menuSelected == 'addArticle'):?>active<?php endif;?>"
+            href="addArticle.php">Ajouter</a>
+        </div>
+      </li>
+      <li
+        class="nav-item dropdown <?php if($menuSelected == 'addCategory' || $menuSelected == 'listeCategory' || $menuSelected == 'editCategory'):?>active<?php endif;?>">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Catégories <?php if($menuSelected == 'addCategory' || $menuSelected == 'listeCategory' || $menuSelected == 'editCategory'):?><span class="sr-only">(current)</span><?php endif;?>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarUser">
+          <a class="dropdown-item <?php if($menuSelected == 'listeCategory'):?>active<?php endif;?>"
+            href="listeCategory.php">Liste</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item  <?php if($menuSelected == 'addCategory'):?>active<?php endif;?>"
+            href="addCategory.php">Ajouter</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Commentaires</a>
+      </li>
+      <li
+        class="nav-item dropdown <?php if($menuSelected == 'addUser' || $menuSelected == 'listeUser' || $menuSelected == 'editUser'):?>active<?php endif;?>">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Utilisateurs <?php if($menuSelected == 'addUser' || $menuSelected == 'listeUser' || $menuSelected == 'editUser'):?><span class="sr-only">(current)</span><?php endif;?>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarUser">
+          <a class="dropdown-item <?php if($menuSelected == 'listeUser'):?>active<?php endif;?>"
+            href="listeUser.php">Liste</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item  <?php if($menuSelected == 'addUser'):?>active<?php endif;?>" href="addUser.php">Ajouter</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Profil
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Voir mon profil</a>
+          <a class="dropdown-item" href="#">Modifier mon profil</a>
+          <a class="dropdown-item" href="logout.php">Déconnexion</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div class="container">
+  <!-- Content here -->
+  <p class="lead text-right">Bienvenue, <?=$_SESSION['user']['name']?></p>
+  <h1><?=$title?></h1>
+  <div class="row">
+    <?php if(isset($flashbag) && $flashbag!=false):?>
+      <?php foreach($flashbag as $message):?>
+        <div class="alert alert-dismissible alert-<?=$message['level']?>" role="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <p><?=$message['message']?></p>
+        </div>
+      <?php endforeach;?>
+    <?php endif;?>
+    <?php
+      include('tpl/'.$vue);
+    ?>
+  </div>
+</div>
+
+
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer cet element ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a id="linkdelete" href="test.php"><button type="button" class="btn btn-primary">Supprimer</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  //DataTable
+  $(document).ready(function () {
+    $('#tableDonnee').DataTable({
+      colReorder: true,
+      stateSave: true,
+      dom: 'Bfrtip',
+      buttons: [
+        'pageLength',
+        'print',
+        'copyHtml5',
+        'csvHtml5',
+        'pdfHtml5',
+        'colvis'
+      ],
+      columnDefs: [
+        { "orderable": false, "targets": -1 }
+      ],
+      language: {
+        url: 'js/dataTable/i18n/fr.json'
+      }
+    });
+  });
+
+  //TinyMCE
+  tinymce.init({
+    selector: 'textarea',
+    height: 500,
+    relative_urls: false,
+    plugins: [
+      "advlist autolink lists link image charmap print preview anchor",
+      "searchreplace visualblocks code fullscreen",
+      "insertdatetime media table paste imagetools wordcount"
+    ],
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    content_css: [
+      'css/bootstrap.min.css',
+    ],
+    images_upload_url: '<?=URL?>/lib/uploadTinyMce.php'
+  });
+
+
+  //Modal delete Bootstrap
+  $('#delete').on('show.bs.modal', function (e) {
+    $('#linkdelete').attr("href", e.relatedTarget.href);
+  });
+</script>
+
+</body>
+</html>

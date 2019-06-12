@@ -1,0 +1,40 @@
+.navbar, h1{
+	font-family: 'Open Sans', sans-serif;
+}
+.card-link+.card-link{
+	margin-left: 0;
+}
+.card{
+	margin-bottom: 1.5rem;
+}
+.card-header{
+		color: white;
+}
+.form-check-label{
+	margin-right: 1.5rem;
+}
+form button{
+	margin-top: 0.4rem;
+}
+table{
+	margin-top: 1.5rem;
+}
+
+.big
+{
+    font-size:1.6rem;
+}
+
+.green
+{
+    color:forestgreen;
+}
+
+.red
+{
+    color:red;
+}
+
+.list-group li>ul>li {
+  border:0px;
+}

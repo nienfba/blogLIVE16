@@ -43,6 +43,15 @@ try
         $bdd = connexion();
         $errorForm = []; //Pas d'erreur pour le moment sur les données
 
+        /*$user = new User();
+        $user->setFirstName(trim($_POST['firstname']));
+        $user->setLastName(trim($_POST['lastname']));
+        $user->setEmail($_POST['email']);
+        $user->setPassword($_POST['password']);
+        $user->setValide(isset($_POST['valide'])?true:false);
+        $user->setRole($_POST['role']);*/
+
+
         /* Récupération des données de l'article */
         $firstnameUser = trim($_POST['firstname']);
         $lastnameUser = $_POST['lastname'];
@@ -69,6 +78,10 @@ try
         //On vérifie si l'utilisateur n'est pas déjà dans la base avec cet email (champ unique email !!)
 
         /** On vérifie qu'un utilisateur n'est pas déjà dans la base de données*/
+        /*$userVerif = new User();
+        $userVerif->loadByEmail($user->getEmail());*/
+        // On va voir autrement - Exceptions !!
+
         $sth = $bdd->prepare('SELECT u_email FROM '.DB_PREFIXE.'user WHERE u_email = :email');
         $sth->bindValue('email',$emailUser,PDO::PARAM_STR);
         $user = $sth->fetch(PDO::FETCH_ASSOC);
@@ -94,6 +107,7 @@ try
             $sth->bindValue('valide',$valideUser,PDO::PARAM_INT);
             $sth->bindValue('role',$roleUser,PDO::PARAM_STR);
             $sth->execute();
+            //$user->save();
 
             addFlashBag('L\'utilisateur a bien été ajouté');
 

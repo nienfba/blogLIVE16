@@ -6,14 +6,13 @@ const DB_PASS   = '';
 
 const DB_PREFIXE = 'b_';
 
+/** FILES ET URL */
+const URL = 'http://localhost:8080/3WA-MA20/php/blog/';
 
-
-/** FILES */
 //Répertoire chemin complet vers le blog (pour l'upload)
 define('UPLOADS_DIR', realpath(dirname(__FILE__)."/../").'/img/uploads/');
 
 //URL complète vers le répertoire upload (pour l'affichage des images dans l'HTML)
-const UPLOADS_URL      = '';
-
+const UPLOADS_URL = URL.'/img/uploads/';
 
 const ROLES = ['ROLE_ADMIN'=>'Administrateur','ROLE_AUTHOR'=>'Auteur'];

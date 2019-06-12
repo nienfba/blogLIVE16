@@ -24,7 +24,6 @@ $menuSelected = 'addArticle';   //menu qui sera sélect dans la nav du layout
 $id=null; //pas d'id
 $titleArticle = '';
 $datePublished = new DateTime();
-$dateCreated = new DateTime();
 $contentArticle = '';
 $valideArticle = 1;
 $catArticle = 0;
@@ -68,7 +67,6 @@ try
         $dateArticle = $_POST['date'];
         $timeArticle = $_POST['time'];
         $datePublished = new DateTime($dateArticle.' '.$timeArticle);
-        $dateCreated = new DateTime();
         $catArticle = $_POST['categorie'];
         $contentArticle = trim($_POST['content']);
         $valideArticle = isset($_POST['valide'])?true:false;
@@ -81,7 +79,7 @@ try
         if($datePublished===false)
             $errorForm[] = 'La date de publication est erronée !';
         
-        var_dump($_POST);
+        //var_dump($_POST);
         /** Récupérer l'image et la déplacer ! */
         if($_FILES['picture']["tmp_name"] != '')
         {
@@ -98,12 +96,11 @@ try
             //Préparation requête
             $sth = $bdd->prepare('INSERT INTO '.DB_PREFIXE.'article 
             (a_id,a_title,a_date_published,a_date_created,a_content,a_picture,a_categorie,a_author,a_valide)
-            VALUES (NULL,:title,:datePublished,:dateCreated,:content,:picture,:categorie,:author,:valide)');
+            VALUES (NULL,:title,:datePublished,NOW(),:content,:picture,:categorie,:author,:valide)');
 
             //Liage (bind) des valeurs
             $sth->bindValue('title',$titleArticle,PDO::PARAM_STR);
             $sth->bindValue('datePublished',$datePublished->format('Y-m-d H:i:s'));
-            $sth->bindValue('dateCreated',$dateCreated->format('Y-m-d H:i:s'));
             $sth->bindValue('content',$contentArticle,PDO::PARAM_STR);
             $sth->bindValue('picture',$pictureArticle,PDO::PARAM_STR);
             $sth->bindValue('categorie',$catArticle,PDO::PARAM_INT);

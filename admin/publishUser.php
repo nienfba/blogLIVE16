@@ -29,12 +29,6 @@ try
         
         $id = $_GET['id'];
         
-        /** On recherche l'article dans la base de données */
-        /*$sth = $bdd->prepare('SELECT u_valide FROM '.DB_PREFIXE.'user WHERE u_id = :id');
-        $sth->bindValue('id',$id,PDO::PARAM_INT);
-        $sth->execute();
-        $user = $sth->fetch(PDO::FETCH_ASSOC);*/
-        
         $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'user SET u_valide= NOT u_valide WHERE u_id=:id');
         $sth->bindValue('id',$id,PDO::PARAM_INT);
         $sth->execute();

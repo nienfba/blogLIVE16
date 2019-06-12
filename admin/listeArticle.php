@@ -19,14 +19,16 @@ $menuSelected = 'listeArticle';   //menu qui sera sélect dans la nav du layout
 
 try
 {
+    $flashbag = getFlashBag();
+
+
     $bdd = connexion();
     $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article INNER JOIN '.DB_PREFIXE.'user ON a_author=u_id LEFT JOIN '.DB_PREFIXE.'categorie ON a_categorie=c_id');
     $sth->execute();
-
-
-    $flashbag = getFlashBag();
    
     $articles = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    //$articles = Article::getAllArticles();
 
 }
 catch(PDOException $e)

@@ -1,4 +1,5 @@
 <?php
+session_start();
 /** On veut éditer un article. On doit soit :
  * 1. Afficher le formulaire d'édition avec le contenu de l'article pré-rempli
  * 2. Récupérer les données du formulaire et les enregistrer en mettant à jour la bdd ou afficher les erreurs 
