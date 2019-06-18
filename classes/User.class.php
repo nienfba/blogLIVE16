@@ -58,8 +58,6 @@ class User
         //On dit à PDO de nous envoyer une exception s'il n'arrive pas à se connecter ou s'il rencontre une erreur
         $this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-
-
         if($this->id != null)
            $this->load(); 
     }
@@ -101,6 +99,10 @@ class User
 
     }
 
+    /** Charge un utilisateurs par email
+     * @param string $email email de l'utilisateur
+     * @return void
+     */
     public function loadByEmail($email)
     {
         /** On recherche l'article dans la base de données */
@@ -124,15 +126,27 @@ class User
     {
         if($this->id == null)
         {
-            //Insérer
+            //Préparation requête
+            $sth = $this->bdd->prepare('INSERT INTO '.DB_PREFIXE.'user 
+            (u_id,u_firstname,u_lastname,u_email, u_password,u_valide,u_role)
+            VALUES (NULL,:firstname,:lastname,:email, :password,:valide,:role)');
+
+            //Liage (bind) des valeurs
+            $sth->bindValue('firstname', $this->firstname, PDO::PARAM_STR);
+            $sth->bindValue('lastname', $this->lastname, PDO::PARAM_STR);
+            $sth->bindValue('email', $this->email, PDO::PARAM_STR);
+            $sth->bindValue('password', $this->password, PDO::PARAM_STR);
+            $sth->bindValue('valide', $this->valid, PDO::PARAM_INT);
+            $sth->bindValue('role', $this->role, PDO::PARAM_STR);
+            $sth->execute();
+
         }
         else
         {
               //$passwordUser = password_hash($passwordUser,PASSWORD_DEFAULT);
             $sth = $this->bdd->prepare('UPDATE '.DB_PREFIXE.'user SET
-            u_firstname = :firstname,u_lastname=:lastname,u_email=:email,u_password=:password, u_valide=:valide,u_role=:role 
+            u_firstname = :firstname,u_lastname=:lastname,u_email=:email, u_valide=:valide,u_role=:role 
             WHERE u_id=:id');
-            $sth->bindValue('password', $this->password,PDO::PARAM_STR);
             $sth->bindValue('id',$this->id,PDO::PARAM_INT);
             $sth->bindValue('firstname',$this->firstname,PDO::PARAM_STR);
             $sth->bindValue('lastname',$this->lastname,PDO::PARAM_STR);
