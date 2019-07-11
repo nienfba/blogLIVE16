@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `b_user` (
 --
 
 INSERT INTO `b_user` (`u_id`, `u_firstname`, `u_lastname`, `u_email`, `u_password`, `u_valide`, `u_role`) VALUES
-(1, 'Fabien', 'Sellès', 'fab@alti-com.fr', '$2y$10$ehoi/9FxqYkg7O7zYJDZHeSWTSV6g1V7QC9/tkm3.cPp6I8kDwDyC', 1, 'ROLE_ADMIN'),
+(1, 'Super', 'Admin', 'super@admin.fr', '$2y$10$ehoi/9FxqYkg7O7zYJDZHeSWTSV6g1V7QC9/tkm3.cPp6I8kDwDyC', 1, 'ROLE_ADMIN'),
 (6, 'Jean', 'Halu', 'login@user.fr', '$2y$10$3g/kTi6vhooxQIC6GLPvFeWoZRAn4pt57MsVawQWsJ.lVmL/ZNvNy', 1, 'ROLE_ADMIN');
 COMMIT;
 

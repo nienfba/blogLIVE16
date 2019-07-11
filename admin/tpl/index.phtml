@@ -60,26 +60,12 @@
           <li class="list-group-item active bg-dark">
             <h5>Liste des derniers articles</h5>
           </li>
-          <li class="list-group-item">
-              <h6>Article 1</h6>
-              <p>début du texte de l'article (...)</p>
-              <footer class="blockquote-footer">Auteur : <cite title="Source Title">Fred</cite></footer>
-          </li>
-          <li class="list-group-item">
-            <h6>Article 2</h6>
-            <p>début du texte de l'article (...)</p>
-              <footer class="blockquote-footer">Auteur : <cite title="Source Title">Fred</cite></footer>
-          </li>
-          <li class="list-group-item">
-            <h6>Article 3</h6>
-            <p>début du texte de l'article (...)</p>
-              <footer class="blockquote-footer">Auteur : <cite title="Source Title">Fred</cite></footer>
-          </li>
-          <li class="list-group-item">
-            <h6>Article 4</h6>
-            <p>début du texte de l'article (...)</p>
-              <footer class="blockquote-footer">Auteur : <cite title="Source Title">Fred</cite></footer>
-          </li>
+          <?php foreach ($articles as $article):?>
+            <li class="list-group-item">
+                <h6><span class="d-none"><?=$article['a_valide']?></span><a href="publishArticle.php?id=<?=$article['a_id']?>"><i class="big <?php if ($article['a_valide']==true):?>green icon-toggle-right<?php else:?>red icon-toggle-left<?php endif;?>"></i></a> <?=$article['a_title']?> <span class="badge badge-pill badge-success"><?=$article['c_title']?></span></h6>
+                <footer class="blockquote-footer">Auteur : <cite title="Source Title"><?=$article['u_firstname'].' '.$article['u_lastname']?></cite></footer>
+            </li> 
+          <?php endforeach;?>
         </ul>
         <a href="listeArticle.php">Voir tous les articles</a>
     </div>

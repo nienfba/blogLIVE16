@@ -26,6 +26,14 @@ try {
 
     //On ordonne les catégories par ordre hirarchique avec un niveau (ATTENTION niveau avancé...)
     $categories = orderCategoriesLevel($categories);
+
+    $bdd = connexion();
+    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article INNER JOIN '.DB_PREFIXE.'user ON a_author=u_id LEFT JOIN '.DB_PREFIXE.'categorie ON a_categorie=c_id ORDER BY a_date_created DESC LIMIT 1,5 ');
+    $sth->execute();
+   
+    $articles = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+
 }
 catch(PDOException $e)
 {
