@@ -34,6 +34,7 @@ try
     $sth->execute();
     $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
 
+    $categories = orderCategoriesLevel($categories);
 
     /**S'il a des données en entrée */
     if(array_key_exists('title',$_POST))

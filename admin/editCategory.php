@@ -36,6 +36,7 @@ try
     $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie');
     $sth->execute();
     $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
+    $categories = orderCategoriesLevel($categories);
 
 
     if(array_key_exists('id',$_GET))

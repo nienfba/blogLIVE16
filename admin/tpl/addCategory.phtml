@@ -21,9 +21,11 @@
     <div class="form-group">
       <label for="categorie">Catégorie parent</label>
       <select class="form-control" id="categorie" name="categorie">
-        <option value="">Aucune</option>
         <?php foreach($categories as $categorie):?>
-          <option value="<?=$categorie['c_id']?>" <?php if($catParent == $categorie['c_id']):?>selected<?php endif;?>><?=$categorie['c_title']?></option>
+          <option value="<?=$categorie['c_id']?>" <?php if($catParent == $categorie['c_id']):?>selected<?php endif;?>>
+            <?php for($i=0;$i<=$categorie['level'];$i++):?>&nbsp;<?php endfor;?>
+            <?=$categorie['c_title']?>
+          </option>
         <?php endforeach;?>
       </select>
        <small id="catHelp" class="form-text text-muted">Sélectionnez une catégorie parent</small>
