@@ -10,7 +10,8 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
-include('../lib/bdd.lib.php');
+include('../lib/models/Article.php');
+include('../lib/models/Categorie.php');
 
 userIsConnected();
 
@@ -45,8 +46,8 @@ try
      * 
      * =>   Il nous faut donc la liste des catégories même s'il y a des données en entrées ou pas !
     */
-    
-    $categories = listCategory();
+    $modelCategorie = new Categorie();
+    $categories = $modelCategorie->list();
 
     //On ordonne les catégories par ordre hirarchique avec un niveau (ATTENTION niveau avancé...)
     $categories = orderCategoriesLevel($categories);
@@ -89,7 +90,8 @@ try
         /** Si j'ai pas d'erreur j'insert dans la bdd */
         if(count($errorForm) == 0)
         {
-            addArticle($titleArticle, $datePublished, $contentArticle, $pictureArticle, $catArticle,  $authorId, $valideArticle);
+            $modelArticle = new Article();
+            $modelArticle->add($titleArticle, $datePublished, $contentArticle, $pictureArticle, $catArticle,  $authorId, $valideArticle);
 
             addFlashBag('L\'article a bien été ajouté');
 

@@ -33,9 +33,9 @@ try
     $bdd = connexion();
 
     /** On va récupérer les catégories dans la bdd*/
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie');
-    $sth->execute();
-    $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
+    $modelCategorie = new Categorie();
+    $categories = $modelCategorie->list();
+
     $categories = orderCategoriesLevel($categories);
 
 
@@ -43,11 +43,7 @@ try
     {
         $id = $_GET['id'];
         
-        /** On recherche l'article dans la base de données */
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie WHERE c_id = :id');
-        $sth->bindValue('id',$id,PDO::PARAM_INT);
-        $sth->execute();
-        $categorie = $sth->fetch(PDO::FETCH_ASSOC);
+        $categorie = $modelCategorie->find($id);
         
         //$authorId = $article['a_author']; on ne met pas à jour l'auteur initial !
         $titleCategory = $categorie['c_title'];

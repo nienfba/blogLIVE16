@@ -10,6 +10,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 include('../lib/bdd.lib.php');
+include('../lib/models/Article.php');
 
 userIsConnected();
 
@@ -22,7 +23,8 @@ try
 {
     $flashbag = getFlashBag();
 
-    $articles = listArticle();
+    $modelArticle = new Article();
+    $articles = $modelArticle->list();
 }
 catch(PDOException $e)
 {

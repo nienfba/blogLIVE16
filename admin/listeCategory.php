@@ -5,7 +5,8 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
-include('../lib/bdd.lib.php');
+include('../lib/models/Categorie.php');
+include('../lib/models/Comment.php');
 
 userIsConnected();
 
@@ -17,7 +18,8 @@ $menuSelected = 'listeCategory';   //menu qui sera sélect dans la nav du layout
 try
 {
 
-    $categories = listParentOrderedCategory();
+    $modelCategorie = new Categorie();
+    $categories = $modelCategorie->listParentOrdered();
 
     /**  On va créer un tableau des catégorie hiérarchisée pour afficher des ul>li hiérarchiques (arbre des catégories parent/enfants)
     * Utilisation d'une fonction récursive (pour l'exemple algorithmique !).

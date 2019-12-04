@@ -9,6 +9,7 @@ include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
 include('../lib/bdd.lib.php');
+include('../lib/models/Article.php');
 
 userIsConnected();
 
@@ -33,9 +34,10 @@ try
         
         $id = $_GET['id'];
 
-        $article = findArticle($id);
-        
-        updateStatusArticle($id, !$article['a_valide']);
+        $modelArticle = new Article();
+        $article = $modelArticle->find($id);
+
+        $modelArticle->updateStatus($id, !$article['a_valide']);
 
         addFlashBag('La publication de l\'article a bien été modifé');
         header('Location:listeArticle.php');

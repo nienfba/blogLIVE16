@@ -9,7 +9,7 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
-include('../lib/bdd.lib.php');
+include('../lib/models/Article.php');
 
 userIsConnected();
 
@@ -25,8 +25,8 @@ try
     {
         $id = $_GET['id'];
 
-      
-        $article = findArticle($id);
+        $modelArticle = new Article();
+        $article = $modelArticle->find($id);
 
         if($article)
         {
@@ -35,7 +35,7 @@ try
             //on supprime l'image si elle existe sur le disque
             delFile(UPLOADS_DIR.'articles/'.$article['a_picture']);
 
-            delArticle($id);
+            $modelArticle->del($id);
 
             addFlashBag('L\'article a bien été supprimé');
             //redirection vers la liste des articles (PRG - Post Redirect Get)

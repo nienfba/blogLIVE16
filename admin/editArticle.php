@@ -9,7 +9,8 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
-include('../lib/bdd.lib.php');
+include('../lib/models/Article.php');
+include('../lib/models/Categorie.php');
 
 userIsConnected();
 
@@ -31,19 +32,20 @@ try
     $bdd = connexion();
 
     /** On va récupérer les catégories dans la bdd*/
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie');
-    $sth->execute();
-    $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
+    $modelCategorie = new Categorie();
+    $categories = $modelCategorie->list();
 
     //On ordonne les catégories par ordre hirarchique avec un niveau (ATTENTION niveau avancé...)
     $categories = orderCategoriesLevel($categories);
+
+    $modelArticle = new Article();
 
     /**On récupère l'id de l'article à modifier */
     if(array_key_exists('id',$_GET))
     {
         $id = $_GET['id'];
         
-        $article = findArticle($id);
+        $article = $modelArticle->find($id);
         
         //$authorId = $article['a_author']; on ne met pas à jour l'auteur initial !
         $titleArticle = $article['a_title'];
@@ -102,7 +104,7 @@ try
         if(count($errorForm) == 0)
         {
 
-            updateArticle($id, $titleArticle, $datePublished, $contentArticle , $pictureArticle, $catArticle, $valideArticle);
+            $modelArticle->update($id, $titleArticle, $datePublished, $contentArticle , $pictureArticle, $catArticle, $valideArticle);
 
             //redirection vers la liste des articles (PRG - Post Redirect Get)
             addFlashBag('L\'article a bien été modifé');
