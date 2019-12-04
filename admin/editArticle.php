@@ -9,6 +9,7 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+include('../lib/bdd.lib.php');
 
 userIsConnected();
 
@@ -42,11 +43,7 @@ try
     {
         $id = $_GET['id'];
         
-        /** On recherche l'article dans la base de données */
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE a_id = :id');
-        $sth->bindValue('id',$id,PDO::PARAM_INT);
-        $sth->execute();
-        $article = $sth->fetch(PDO::FETCH_ASSOC);
+        $article = findArticle($id);
         
         //$authorId = $article['a_author']; on ne met pas à jour l'auteur initial !
         $titleArticle = $article['a_title'];
@@ -64,7 +61,7 @@ try
     /**S'il a des données en entrée - Le formulaire est posté*/
     if(array_key_exists('title',$_POST))
     {
-        var_dump($_POST);
+        //var_dump($_POST);
         $errorForm = []; //Pas d'erreur pour le moment sur les données
 
         $id = $_POST['id']; //on récupère l'id de l'article
@@ -104,22 +101,12 @@ try
         /** Si j'ai pas d'erreur j'insert dans la bdd */
         if(count($errorForm) == 0)
         {
-            //Préparation requête
-            $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'article SET a_title = :title ,a_date_published=:datePublished,
-            a_content=:content,a_picture=:picture,a_categorie=:categorie,a_valide=:valide WHERE a_id=:id');
 
-            //Liage (bind) des valeurs
-            $sth->bindValue('id',$id,PDO::PARAM_INT);
-            $sth->bindValue('title',$titleArticle,PDO::PARAM_STR);
-            $sth->bindValue('datePublished',$datePublished->format('Y-m-d H:i:s'));
-            $sth->bindValue('content',$contentArticle,PDO::PARAM_STR);
-            $sth->bindValue('picture',$pictureArticle,PDO::PARAM_STR);
-            $sth->bindValue('categorie',$catArticle,PDO::PARAM_INT);
-            $sth->bindValue('valide',$valideArticle,PDO::PARAM_BOOL);
-            $sth->execute();
+            updateArticle($id, $titleArticle, $datePublished, $contentArticle , $pictureArticle, $catArticle, $valideArticle);
 
             //redirection vers la liste des articles (PRG - Post Redirect Get)
             addFlashBag('L\'article a bien été modifé');
+            
             header('Location:listeArticle.php');
             exit(); //on arrête le script après redirection pour éviter que PHP ne continu son boulot inutilement !
         }

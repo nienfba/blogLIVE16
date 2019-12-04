@@ -8,6 +8,7 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+include('../lib/bdd.lib.php');
 
 userIsConnected();
 
@@ -31,17 +32,10 @@ try
         $bdd = connexion();
         
         $id = $_GET['id'];
+
+        $article = findArticle($id);
         
-        /** On recherche l'article dans la base de données */
-        $sth = $bdd->prepare('SELECT a_valide FROM '.DB_PREFIXE.'article WHERE a_id = :id');
-        $sth->bindValue('id',$id,PDO::PARAM_INT);
-        $sth->execute();
-        $article = $sth->fetch(PDO::FETCH_ASSOC);
-        
-        $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'article SET a_valide=:valide WHERE a_id=:id');
-        $sth->bindValue('id',$id,PDO::PARAM_INT);
-        $sth->bindValue('valide',!$article['a_valide'],PDO::PARAM_INT);
-        $sth->execute();
+        updateStatusArticle($id, !$article['a_valide']);
 
         addFlashBag('La publication de l\'article a bien été modifé');
         header('Location:listeArticle.php');

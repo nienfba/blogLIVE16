@@ -9,6 +9,7 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+include('../lib/bdd.lib.php');
 
 userIsConnected();
 
@@ -24,10 +25,8 @@ try
     {
         $id = $_GET['id'];
 
-        $bdd = connexion();
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE a_id = :id');
-        $sth->execute(['id'=>$id]);
-        $article = $sth->fetch(PDO::FETCH_ASSOC);
+      
+        $article = findArticle($id);
 
         if($article)
         {
@@ -36,21 +35,24 @@ try
             //on supprime l'image si elle existe sur le disque
             delFile(UPLOADS_DIR.'articles/'.$article['a_picture']);
 
-            //On supprime l'article
-            $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'article WHERE a_id = :id');
-            $sth->execute(['id'=>$id]);
+            delArticle($id);
 
             addFlashBag('L\'article a bien été supprimé');
             //redirection vers la liste des articles (PRG - Post Redirect Get)
-            header('Location:listeArticle.php');
-            exit(); //on arrête le script après redirection pour éviter que PHP ne continu son boulot inutilement !
+           
         }
         else
         {
-            //on a pas d'article correspondant ! 
-
+            addFlashBag('Article introuvable !');
         }
+
     }
+    else
+    {
+        addFlashBag('Pas d\'identifiant fourni !');
+    }
+    header('Location:listeArticle.php');
+    exit(); //on arrête le script après redirection pour éviter que PHP ne continu son boulot inutilement !
 
 }
 catch(PDOException $e)

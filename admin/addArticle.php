@@ -10,6 +10,7 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+include('../lib/bdd.lib.php');
 
 userIsConnected();
 
@@ -44,14 +45,8 @@ try
      * 
      * =>   Il nous faut donc la liste des catégories même s'il y a des données en entrées ou pas !
     */
-    //var_dump($_SERVER);
     
-    $bdd = connexion();
-
-    /** On va récupérer les catégories dans la bdd*/
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie');
-    $sth->execute();
-    $categories = $sth->fetchAll(PDO::FETCH_ASSOC);
+    $categories = listCategory();
 
     //On ordonne les catégories par ordre hirarchique avec un niveau (ATTENTION niveau avancé...)
     $categories = orderCategoriesLevel($categories);
@@ -94,20 +89,7 @@ try
         /** Si j'ai pas d'erreur j'insert dans la bdd */
         if(count($errorForm) == 0)
         {
-            //Préparation requête
-            $sth = $bdd->prepare('INSERT INTO '.DB_PREFIXE.'article 
-            (a_id,a_title,a_date_published,a_date_created,a_content,a_picture,a_categorie,a_author,a_valide)
-            VALUES (NULL,:title,:datePublished,NOW(),:content,:picture,:categorie,:author,:valide)');
-
-            //Liage (bind) des valeurs
-            $sth->bindValue('title',$titleArticle,PDO::PARAM_STR);
-            $sth->bindValue('datePublished',$datePublished->format('Y-m-d H:i:s'));
-            $sth->bindValue('content',$contentArticle,PDO::PARAM_STR);
-            $sth->bindValue('picture',$pictureArticle,PDO::PARAM_STR);
-            $sth->bindValue('categorie',$catArticle,PDO::PARAM_INT);
-            $sth->bindValue('author',$authorId,PDO::PARAM_INT);
-            $sth->bindValue('valide',$valideArticle,PDO::PARAM_BOOL);
-            $sth->execute();
+            addArticle($titleArticle, $datePublished, $contentArticle, $pictureArticle, $catArticle,  $authorId, $valideArticle);
 
             addFlashBag('L\'article a bien été ajouté');
 

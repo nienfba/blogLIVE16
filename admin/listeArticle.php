@@ -9,6 +9,7 @@ session_start();
 include('../config/config.php');
 /**On inclu ensuite nos librairies dont le programme a besoin */
 include('../lib/app.lib.php');
+include('../lib/bdd.lib.php');
 
 userIsConnected();
 
@@ -21,15 +22,7 @@ try
 {
     $flashbag = getFlashBag();
 
-
-    $bdd = connexion();
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article INNER JOIN '.DB_PREFIXE.'user ON a_author=u_id LEFT JOIN '.DB_PREFIXE.'categorie ON a_categorie=c_id');
-    $sth->execute();
-   
-    $articles = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-    //$articles = Article::getAllArticles();
-
+    $articles = listArticle();
 }
 catch(PDOException $e)
 {
