@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 /** On veut ajouter un article. On doit soit :
  * 1. Afficher le formulaire d'ajout
  * 2. Récupérer les données du formulaire et les enregistrer ou afficher les erreurs 

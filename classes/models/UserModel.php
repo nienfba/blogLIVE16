@@ -1,7 +1,16 @@
 <?php
 
-class User
+class UserModel
 {
+    /** 
+     * @var integer MIN_FIRSTNAME_LENGTH Constante taille minimum inclue du nom d'utilisateur 
+     */
+    const MIN_FIRSTNAME_LENGTH = 5;
+    /** 
+     * @var integer MAX_FIRSTNAME_LENGTH Constante taille maximum inclue du nom d'utilisateur 
+     */
+    const MAX_FIRSTNAME_LENGTH = 10;
+
      /**
      * @var integer id de l'utilisateur
      */
@@ -83,7 +92,7 @@ class User
         $this->role  = $user['u_role'];
     }
 
-    /** Charge tous les article d'un utilisateur
+    /** Charge tous les articles d'un utilisateur
      * @param void
      * @return void
      */
@@ -166,10 +175,6 @@ class User
         $sth->execute();
     }
 
-    
-
-   
-
     /**
      * Get id de l'utilisateur
      *
@@ -187,7 +192,7 @@ class User
      *
      * @return  self
      */ 
-    public function setId($id)
+    public function setId($id):UserModel
     {
         $this->id = $id;
 
@@ -211,8 +216,11 @@ class User
      *
      * @return  self
      */ 
-    public function setFirstname(string $firstname)
+    public function setFirstname(string $firstname):UserModel
     {
+        if(count($firstname) >= MIN_FIRSTNAME_LENGTH || count($firstname) <= MAX_FIRSTNAME_LENGTH)
+            throw new DomainException('Le nom d\'utilisateur n\'est pas correct');
+
         $this->firstname = $firstname;
 
         return $this;
