@@ -15,7 +15,7 @@ userIsConnected('ROLE_ADMIN');
 
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'addUser.phtml';      //vue qui sera affichée dans le layout
+$vue = 'user/add';      //vue qui sera affichée dans le layout
 $title = 'Ajouter un utilisateur';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'addUser';   //menu qui sera sélect dans la nav du layout
 
@@ -82,7 +82,7 @@ try
         $userVerif->loadByEmail($user->getEmail());*/
         // On va voir autrement - Exceptions !!
 
-        $sth = $bdd->prepare('SELECT u_email FROM '.DB_PREFIXE.'user WHERE u_email = :email');
+        $sth = $bdd->prepare('SELECT user_email FROM '.DB_PREFIXE.'user WHERE user_email = :email');
         $sth->bindValue('email',$emailUser,PDO::PARAM_STR);
         $user = $sth->fetch(PDO::FETCH_ASSOC);
         if($user != false)
@@ -96,7 +96,7 @@ try
             
             //Préparation requête
             $sth = $bdd->prepare('INSERT INTO '.DB_PREFIXE.'user 
-            (u_id,u_firstname,u_lastname,u_email, u_password,u_valide,u_role)
+            (user_id,user_firstname,user_lastname,user_email, user_password,user_valide,user_role)
             VALUES (NULL,:firstname,:lastname,:email, :password,:valide,:role)');
 
             //Liage (bind) des valeurs
@@ -124,9 +124,9 @@ catch(PDOException $e)
      * Dans l'avenir il faudra ici envoyer un email à l'admin par exemple car il n'est pas normal d'avoir une erreur de connexion au 
      * serveur ou une erreur SQL !
      */
-   //$vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
-    $errorForm[] = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
+    $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }
 
 include('tpl/layout.phtml');

@@ -1,0 +1,25 @@
+<section>
+    <p class="text-right"><a href="addUser.php" class="btn btn-primary"><i class="icon-user-plus"></i> Ajouter un utilisateur</a></p>
+    <table id="tableDonnee" class="table">
+        <thead>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Actif</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <?php foreach($users as $user):?>
+                <tr>
+                    <td><?=$user['use_firstname']?></td>
+                    <td><?=$user['use_lastname']?></td>
+                    <td><?=$user['use_email']?></td>
+                    <td><?=ROLES[$user['use_role']]?></td>
+                    <td><span class="d-none"><?=$user['use_valide']?></span><a href="publishUser.php?id=<?=$user['use_id']?>"><i class="big <?php if($user['use_valide']==true):?>green icon-toggle-right<?php else:?>red icon-toggle-left<?php endif;?>"></i></a></td>
+                    <td><span class="badge badge-pill badge-success"><?=$user['articles']?> article(s)</span> <a href="editUser.php?id=<?=$user['use_id']?>"><i class="icon-edit"></i></a> <a href="delUser.php?id=<?=$user['use_id']?>" data-toggle="modal" data-target="#delete"><i class="icon-trash"></i></a></td>
+                </tr> 
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</section>

@@ -1,12 +1,12 @@
 <article>
-   <?=$article['a_content']?>
+   <?=$article['art_content']?>
 </article>
 <?php if($comments):?>
    <h2>Les commentaires</h2>
    <?php foreach($comments as $comment):?>
-      <h3><i class="fas fa-comment"></i> <?=$comment['c_pseudo']?> a écrit :
-         <small>le <?=(new DateTime($comment['c_date_posted']))->format('d/m/Y à H:i:s')?></small></h3>
-      <p><?=htmlentities($comment['c_content'])?></p>
+      <h3><i class="fas fa-comment"></i> <?=$comment['com_pseudo']?> a écrit :
+         <small>le <?=(new DateTime($comment['com_date_posted']))->format('d/m/Y à H:i:s')?></small></h3>
+      <p><?=htmlentities($comment['com_content'])?></p>
    <?php endforeach;?>
 <?php endif;?>
 <a name="comment"></a>

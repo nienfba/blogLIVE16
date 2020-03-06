@@ -13,7 +13,7 @@ include('../lib/app.lib.php');
 userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'addArticle.phtml';      //vue qui sera affichée dans le layout - m^me vue que l'ajout
+$vue = 'article/add';      //vue qui sera affichée dans le layout - m^me vue que l'ajout
 $title = 'Editer un article';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'editArticle';   //menu qui sera sélect dans la nav du layout
 
@@ -43,18 +43,18 @@ try
         $id = $_GET['id'];
         
         /** On recherche l'article dans la base de données */
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE a_id = :id');
+        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE art_id = :id');
         $sth->bindValue('id',$id,PDO::PARAM_INT);
         $sth->execute();
         $article = $sth->fetch(PDO::FETCH_ASSOC);
         
-        //$authorId = $article['a_author']; on ne met pas à jour l'auteur initial !
-        $titleArticle = $article['a_title'];
-        $datePublished = new DateTime($article['a_date_published']);
-        $contentArticle = $article['a_content'];
-        $valideArticle = $article['a_valide'];
-        $catArticle = $article['a_categorie'];
-        $pictureArticle = $article['a_picture'];
+        //$authorId = $article['art_author']; on ne met pas à jour l'auteur initial !
+        $titleArticle = $article['art_title'];
+        $datePublished = new DateTime($article['art_date_published']);
+        $contentArticle = $article['art_content'];
+        $valideArticle = $article['art_valide'];
+        $catArticle = $article['art_categorie'];
+        $pictureArticle = $article['art_picture'];
 
         /** On va injectée ces données dans la vue. Comme la vue est la même que l'ajout on va paramètrer le formulaire si l'id n'est pas nul
          * On va donc rajouter un $id=null dans le programme d'ajout
@@ -105,8 +105,8 @@ try
         if(count($errorForm) == 0)
         {
             //Préparation requête
-            $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'article SET a_title = :title ,a_date_published=:datePublished,
-            a_content=:content,a_picture=:picture,a_categorie=:categorie,a_valide=:valide WHERE a_id=:id');
+            $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'article SET art_title = :title ,art_date_published=:datePublished,
+            art_content=:content,art_picture=:picture,art_categorie=:categorie,art_valide=:valide WHERE art_id=:id');
 
             //Liage (bind) des valeurs
             $sth->bindValue('id',$id,PDO::PARAM_INT);
@@ -136,7 +136,7 @@ catch(PDOException $e)
      * Dans l'avenir il faudra ici envoyer un email à l'admin par exemple car il n'est pas normal d'avoir une erreur de connexion au 
      * serveur ou une erreur SQL !
      */
-    $vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

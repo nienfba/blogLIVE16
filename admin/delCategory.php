@@ -25,7 +25,7 @@ try
         $id = $_GET['id'];
 
         $bdd = connexion();
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie WHERE c_id = :id');
+        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie WHERE cat_id = :id');
         $sth->execute(['id'=>$id]);
         $category = $sth->fetch(PDO::FETCH_ASSOC);
 
@@ -33,11 +33,11 @@ try
         {
             //on a bien une catégorie en base avec cet id
             //On vérifie s'il n'y a pas d'article associé
-            $sth = $bdd->prepare('SELECT COUNT(a_id) FROM '.DB_PREFIXE.'article WHERE a_categorie = :id');
+            $sth = $bdd->prepare('SELECT COUNT(art_id) FROM '.DB_PREFIXE.'article WHERE art_categorie = :id');
             $sth->execute(['id'=>$id]);
 
             //On vérifie s'il n'y a pas de catégorie enfants
-            $sth2 = $bdd->prepare('SELECT COUNT(c_id) FROM '.DB_PREFIXE.'categorie WHERE c_parent = :id');
+            $sth2 = $bdd->prepare('SELECT COUNT(cat_id) FROM '.DB_PREFIXE.'categorie WHERE cat_parent = :id');
             $sth2->execute(['id'=>$id]);
 
             if($sth->fetchColumn() > 0)
@@ -50,8 +50,8 @@ try
             }
             else
             {
-                //On supprime l'article
-                $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'categorie WHERE c_id = :id');
+                //On supprime la catégorie
+                $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'categorie WHERE cat_id = :id');
                 $sth->execute(['id'=>$id]);
 
                 addFlashBag('La catégorie a bien été supprimé');
@@ -70,7 +70,7 @@ try
 }
 catch(PDOException $e)
 {
-    $vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

@@ -96,11 +96,11 @@ function getFlashBag()
 /** function userIsConnected
  * Vérifie si l'utilisateur est connecté avec le bon rôle ! 
  * Redirige vers la page de login sinon 
- * @param string $role le role nécessaire pour accéder à la page - default : ROLE_AUTHOR
+ * @param string $role le role nécessaire pour accéder à la page - default : ROLE_ADMIN
  * @param string $redirectLogin chemin relatif de la page de redirection si erreur accès - default : login.php
- * @return void
+ * @return boolean true si droits OK
  */
-function userIsConnected($role= 'ROLE_AUTHOR',$redirectLogin= 'login.php')
+function userIsConnected($role= 'ROLE_ADMIN',$redirectLogin= 'login.php')
 {
     $autho = false;
 
@@ -109,24 +109,19 @@ function userIsConnected($role= 'ROLE_AUTHOR',$redirectLogin= 'login.php')
     /** Gestion des rôles 2 rôle pour le moment c'est assez simple, si plus de rôle on pourra gérer une hiérarchie de rôles !!
      * Si le rôle est le même que celui de l'utilisateur alors accès ok ou si le rôle utilisateur est Admin alors accès ok !
      */
-    if($role == $_SESSION['user']['role'] || $_SESSION['user']['role']=='ROLE_ADMIN') 
-         $autho = true; //access granted
+    if(isset($_SESSION['connected']) && ($role == $_SESSION['user']['role'] || $_SESSION['user']['role']=='ROLE_ADMIN')) 
+         return true; //access granted
 
 
-    //Redirection vers le login si user n'a pas le droit ou n'est pas connect !
-    if(!isset($_SESSION['connected']) || $_SESSION['connected'] != true || $autho == false)
-    {
-        addFlashBag('Vous n\'avez pas accès à cette ressource, vous devez vous connecter','danger');
-        header('Location:'.$redirectLogin);
-        exit();
-    }
-
-    //header('HTTP/1.0 403 Forbidden');
+    addFlashBag('Vous n\'avez pas accès à cette ressource, vous devez vous connecter','danger');
+    header('Location:'.$redirectLogin);
+    exit();
     
 }
 
 
 /** Function récursive (qui s'appelle elle même) permettant de trier le tableau des catégories
+ * C'est un exercice algorithmique. Principe de récursivité
  * @param array $categories le tableau (jeu d'enregistrement) des catégories
  * @param mixed $parent l'id du parent s'il existe ou null
  */
@@ -136,10 +131,10 @@ function orderCategories($categories,$parent=null)
 
     foreach($categories as $index=>$categorie)
     {
-        //var_dump($categorie['c_parent'].' '.$parent);
-        if($categorie['c_parent']==$parent)
+        //var_dump($categorie['cat_parent'].' '.$parent);
+        if($categorie['cat_parent']==$parent)
         {
-            $childrens = orderCategories($categories,$categorie['c_id']);
+            $childrens = orderCategories($categories,$categorie['cat_id']);
             if(count($childrens)>0)
                 $categorie['childrens'] = $childrens;
             //var_dump($categorie);
@@ -162,11 +157,11 @@ function orderCategoriesLevel($categories,$parent=null,$level=0)
     $tree = array();
     foreach($categories as $index=>$categorie)
     {
-        if($categorie['c_parent']==$parent)
+        if($categorie['cat_parent']==$parent)
         {
             $categorie['level'] = $level;
             $tree[] = $categorie;
-            $childrens = orderCategoriesLevel($categories,$categorie['c_id'],$level+1);
+            $childrens = orderCategoriesLevel($categories,$categorie['cat_id'],$level+1);
             
             if(count($childrens)> 0)
                 $tree = array_merge($tree,$childrens);
@@ -190,8 +185,8 @@ function displayListeCategorie($categories)
         else
             $classBadge = 'badge-light';
         
-        $html.= '<li class="list-group-item">'.$category['c_title'].' <a href="editCategory.php?id='.$category['c_id'].'"><i class="icon-edit"></i></a> 
-         <a href="delCategory.php?id='.$category['c_id'].'" data-toggle="modal" data-target="#delete"><i class="icon-trash"></i></a>
+        $html.= '<li class="list-group-item">'.$category['cat_title'].' <a href="editCategory.php?id='.$category['cat_id'].'"><i class="icon-edit"></i></a> 
+         <a href="delCategory.php?id='.$category['cat_id'].'" data-toggle="modal" data-target="#delete"><i class="icon-trash"></i></a>
         <span class="badge badge-pill '.$classBadge.'">'.$category['articles'].' article(s)</span>';
         if(isset($category['childrens']))
             $html.= displayListeCategorie($category['childrens']);

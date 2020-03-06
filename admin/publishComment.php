@@ -40,7 +40,7 @@ try
 }
 catch(PDOException $e)
 {
-    $vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

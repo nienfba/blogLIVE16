@@ -1,0 +1,27 @@
+<section>
+    <p class="text-right"><a href="addArticle.php" class="btn btn-primary"><i class="icon-plus-square"></i> Ajouter un article</a></p>
+    <table id="tableDonnee" class="table">
+        <thead>
+            <th>Image</th>
+            <th>Titre</th>
+            <th>Date publication</th>
+            <th>Catégorie</th>
+            <th>Publié</th>
+            <th>Auteur</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <?php foreach($articles as $article):?>
+                <tr>
+                    <td><?php if($article['art_picture'] != null):?><img class="img-thumbnail" width="150" src="<?=UPLOADS_URL.'articles/'.$article['art_picture']?>"><?php endif;?></td>
+                    <td><?=$article['art_title']?></td>
+                    <td><?=(new DateTime($article['art_date_published']))->format('d/m/Y H:i:s')?></td>
+                    <td><span class="badge badge-pill badge-success"><?=$article['cat_title']?></span></td>
+                    <td><span class="d-none"><?=$article['art_valide']?></span><a href="publishArticle.php?id=<?=$article['art_id']?>"><i class="big <?php if($article['art_valide']==true):?>green icon-toggle-right<?php else:?>red icon-toggle-left<?php endif;?>"></i></a></td>
+                    <td><?=$article['use_firstname'].' '.$article['use_lastname']?></td>
+                    <td><a href="editArticle.php?id=<?=$article['art_id']?>"><i class="icon-edit"></i></a> <a href="delArticle.php?id=<?=$article['art_id']?>" data-toggle="modal" data-target="#delete"><i class="icon-trash"></i></a></td>
+                </tr> 
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</section>

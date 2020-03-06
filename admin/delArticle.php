@@ -25,7 +25,7 @@ try
         $id = $_GET['id'];
 
         $bdd = connexion();
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE a_id = :id');
+        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE art_id = :id');
         $sth->execute(['id'=>$id]);
         $article = $sth->fetch(PDO::FETCH_ASSOC);
 
@@ -34,10 +34,10 @@ try
             //on a bien un article en base avec cet id
 
             //on supprime l'image si elle existe sur le disque
-            delFile(UPLOADS_DIR.'articles/'.$article['a_picture']);
+            delFile(UPLOADS_DIR.'articles/'.$article['art_picture']);
 
             //On supprime l'article
-            $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'article WHERE a_id = :id');
+            $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'article WHERE art_id = :id');
             $sth->execute(['id'=>$id]);
 
             addFlashBag('L\'article a bien été supprimé');
@@ -55,7 +55,7 @@ try
 }
 catch(PDOException $e)
 {
-    $vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

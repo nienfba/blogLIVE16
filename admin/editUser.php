@@ -13,7 +13,7 @@ include('../lib/app.lib.php');
 userIsConnected('ROLE_ADMIN');
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'addUser.phtml';      //vue qui sera affichée dans le layout
+$vue = 'user/add';      //vue qui sera affichée dans le layout
 $title = 'Editer un utilisateur';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'editUser';   //menu qui sera sélect dans la nav du layout
 
@@ -41,17 +41,17 @@ try
         $id = $_GET['id'];
         
         /** On recherche l'article dans la base de données */
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'user WHERE u_id = :id');
+        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'user WHERE use_id = :id');
         $sth->bindValue('id',$id,PDO::PARAM_INT);
         $sth->execute();
         $article = $sth->fetch(PDO::FETCH_ASSOC);
         
         //$authorId = $article['a_author']; on ne met pas à jour l'auteur initial !
-        $firstnameUser = $article['u_firstname'];
-        $lastnameUser = $article['u_lastname'];
-        $emailUser = $article['u_email'];
-        $valideUser = $article['u_valide'];
-        $roleUser  = $article['u_role'];
+        $firstnameUser = $article['use_firstname'];
+        $lastnameUser = $article['use_lastname'];
+        $emailUser = $article['use_email'];
+        $valideUser = $article['use_valide'];
+        $roleUser  = $article['use_role'];
     }
 
 
@@ -84,7 +84,7 @@ try
         //On vérifie si l'utilisateur n'est pas déjà dans la base avec cet email (champ unique email !!)
 
         /**On vérifie qu'un utilisateur n'est pas dans la base avec l'email modifié !*/
-        $sth = $bdd->prepare('SELECT u_email FROM '.DB_PREFIXE.'user WHERE u_email = :email');
+        $sth = $bdd->prepare('SELECT use_email FROM '.DB_PREFIXE.'user WHERE use_email = :email');
         $sth->bindValue('email',$emailUser,PDO::PARAM_STR);
         $user = $sth->fetch(PDO::FETCH_ASSOC);
         if($user != false)
@@ -98,8 +98,8 @@ try
             {
                 $passwordUser = password_hash($passwordUser,PASSWORD_DEFAULT);
                 $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'user SET
-                u_firstname = :firstname,u_lastname=:lastname,u_email=:email,u_password=:password, u_valide=:valide,u_role=:role 
-                WHERE u_id=:id');
+                use_firstname = :firstname,use_lastname=:lastname,use_email=:email,use_password=:password, use_valide=:valide,use_role=:role 
+                WHERE use_id=:id');
                 $sth->bindValue('password',$passwordUser,PDO::PARAM_STR);
                 addFlashBag('L\'utilisateur et son mot de passe ont bien été modifiés');
             }
@@ -107,8 +107,8 @@ try
             {
                 //Préparation requête
                 $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'user SET 
-                u_firstname = :firstname,u_lastname=:lastname,u_email=:email,u_valide=:valide,u_role=:role
-                WHERE u_id=:id');
+                use_firstname = :firstname,use_lastname=:lastname,use_email=:email,use_valide=:valide,use_role=:role
+                WHERE use_id=:id');
                 addFlashBag('L\'utilisateur a bien été modifié');
             }
 
@@ -134,9 +134,9 @@ catch(PDOException $e)
      * Dans l'avenir il faudra ici envoyer un email à l'admin par exemple car il n'est pas normal d'avoir une erreur de connexion au 
      * serveur ou une erreur SQL !
      */
-   //$vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
-    $errorForm[] = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
+    $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }
 
 include('tpl/layout.phtml');

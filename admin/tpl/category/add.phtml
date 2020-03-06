@@ -22,9 +22,9 @@
       <label for="categorie">Catégorie parent</label>
       <select class="form-control" id="categorie" name="categorie">
         <?php foreach($categories as $categorie):?>
-          <option value="<?=$categorie['c_id']?>" <?php if($catParent == $categorie['c_id']):?>selected<?php endif;?>>
+          <option value="<?=$categorie['cat_id']?>" <?php if($catParent == $categorie['cat_id']):?>selected<?php endif;?>>
             <?php for($i=0;$i<=$categorie['level'];$i++):?>&nbsp;<?php endfor;?>
-            <?=$categorie['c_title']?>
+            <?=$categorie['cat_title']?>
           </option>
         <?php endforeach;?>
       </select>

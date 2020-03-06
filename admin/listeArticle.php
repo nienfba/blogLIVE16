@@ -13,7 +13,7 @@ include('../lib/app.lib.php');
 userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'listeArticle.phtml';      //vue qui sera affichée dans le layout
+$vue = 'article/liste';      //vue qui sera affichée dans le layout
 $title = 'Tous les articles';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'listeArticle';   //menu qui sera sélect dans la nav du layout
 
@@ -23,17 +23,18 @@ try
 
 
     $bdd = connexion();
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article INNER JOIN '.DB_PREFIXE.'user ON a_author=u_id LEFT JOIN '.DB_PREFIXE.'categorie ON a_categorie=c_id');
+    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article 
+                        INNER JOIN '.DB_PREFIXE.'user ON art_author=use_id 
+                        LEFT JOIN '.DB_PREFIXE.'categorie ON art_categorie=cat_id');
     $sth->execute();
    
     $articles = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-    //$articles = Article::getAllArticles();
 
 }
 catch(PDOException $e)
 {
-    $vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

@@ -14,7 +14,7 @@ include('../lib/app.lib.php');
 userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'addArticle.phtml';      //vue qui sera affichée dans le layout
+$vue = 'article/add';      //vue qui sera affichée dans le layout
 $title = 'Ajouter un article';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'addArticle';   //menu qui sera sélect dans la nav du layout
 
@@ -95,8 +95,8 @@ try
         if(count($errorForm) == 0)
         {
             //Préparation requête
-            $sth = $bdd->prepare('INSERT INTO '.DB_PREFIXE.'article 
-            (a_id,a_title,a_date_published,a_date_created,a_content,a_picture,a_categorie,a_author,a_valide)
+            $sth = $bdd->prepare('INSERT INTO '.DB_PREFIXE. 'article 
+            (art_id,art_title,art_date_published,art_date_created,art_content,art_picture,art_categorie,art_author,art_valide)
             VALUES (NULL,:title,:datePublished,NOW(),:content,:picture,:categorie,:author,:valide)');
 
             //Liage (bind) des valeurs
@@ -124,9 +124,9 @@ catch(PDOException $e)
      * Dans l'avenir il faudra ici envoyer un email à l'admin par exemple car il n'est pas normal d'avoir une erreur de connexion au 
      * serveur ou une erreur SQL !
      */
-   //$vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
-    $errorForm[] = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
+    $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }
 
 include('tpl/layout.phtml');

@@ -3,13 +3,13 @@
     <article>
         <div class="row">
             <div class="col-md-3">
-            <?php if ($article['a_picture'] != null):?>
-                <img class="float-left" src="<?=UPLOADS_URL.'articles/'.$article['a_picture']?>" width="150" alt="" />
+            <?php if ($article['art_picture'] != null):?>
+                <img class="float-left" src="<?=UPLOADS_URL.'articles/'.$article['art_picture']?>" width="150" alt="" />
             <?php endif;?>
             </div>
             <div class="col-md-9 post-preview">
-                <h2 class="post-title"><a href="detailArticle.php?id=<?=$article['a_id']?>"><?=$article['a_title']?></a></h2>
-                <p class="post-meta">Catégory : <?=$article['c_title']?> - Posted by <?=$article['u_firstname']?> <?=$article['u_lastname']?> on <?=(new DateTime($article['a_date_published']))->format('d/m/Y H:i:s')?></p>
+                <h2 class="post-title"><a href="detailArticle.php?id=<?=$article['art_id']?>"><?=$article['art_title']?></a></h2>
+                <p class="post-meta">Catégorie : <?=$article['cat_title']?> - Posté par <?=$article['use_firstname']?> <?=$article['use_lastname']?> on <?=(new DateTime($article['art_date_published']))->format('d/m/Y H:i:s')?></p>
                 <p><?php//mb_strimwidth(strip_tags($article['a_content']), 0, 400, '...');?></p>
             </div>
         </div>

@@ -13,7 +13,7 @@ include('../lib/app.lib.php');
 userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'addCategory.phtml';      //vue qui sera affichée dans le layout
+$vue = 'category/add';      //vue qui sera affichée dans le layout
 $title = 'Editer une catégorie';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'editCategory';   //menu qui sera sélect dans la nav du layout
 
@@ -44,14 +44,14 @@ try
         $id = $_GET['id'];
         
         /** On recherche l'article dans la base de données */
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie WHERE c_id = :id');
+        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'categorie WHERE cat_id = :id');
         $sth->bindValue('id',$id,PDO::PARAM_INT);
         $sth->execute();
         $categorie = $sth->fetch(PDO::FETCH_ASSOC);
         
         //$authorId = $article['a_author']; on ne met pas à jour l'auteur initial !
-        $titleCategory = $categorie['c_title'];
-        $catParent = $categorie['c_parent'];
+        $titleCategory = $categorie['cat_title'];
+        $catParent = $categorie['cat_parent'];
     }
 
 
@@ -75,8 +75,8 @@ try
         if(count($errorForm) == 0)
         {
             $sth = $bdd->prepare('UPDATE '.DB_PREFIXE.'categorie SET
-            c_title = :title,c_parent=:parent
-            WHERE c_id=:id');
+            cat_title = :title,cat_parent=:parent
+            WHERE cat_id=:id');
             //Liage (bind) des valeurs
             $sth->bindValue('id',$id,PDO::PARAM_INT);
             $sth->bindValue('title',$titleCategory,PDO::PARAM_STR);
@@ -98,7 +98,7 @@ catch(PDOException $e)
      * Dans l'avenir il faudra ici envoyer un email à l'admin par exemple car il n'est pas normal d'avoir une erreur de connexion au 
      * serveur ou une erreur SQL !
      */
-     $vue = 'erreur.phtml';
+     $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur= 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

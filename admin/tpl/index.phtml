@@ -1,104 +1,92 @@
   <!-- Content here -->
   <div class="row">
     <div class="col-12-sm col-md-4">
-        <div class="card">
-          <div class="card-header bg-dark"><h5>Visualisation rapide</h5></div>
-      <div class="card-body">
-          <p>Pour voir tout de suite votre site</p>
-        <a href="<?=URL?>" class="d-block btn btn-primary" target="_blank">Afficher votre site</a>
-      </div>
-    </div>
-    <div class="card">
-        <div class="card-header bg-dark"><h5>Actions rapides</h5></div>
+      <div class="card">
+        <div class="card-header bg-dark">
+          <h5>Visualisation rapide</h5>
+        </div>
         <div class="card-body">
-            <a href="addArticle.php" class="d-block card-link"><i class="icon-file-plus"></i> Ajouter un article</a>
-            <a href="addCategory.php" class="d-block card-link"><i class="icon-plus-square"></i> Ajouter une catégorie</a>
-            <a href="addUser.php" class="d-block card-link"><i class="icon-user-plus"></i> Ajouter un utilisateur</a>
+          <p>Pour voir tout de suite votre site</p>
+          <a href="<?= URL ?>" class="d-block btn btn-primary" target="_blank">Afficher votre site</a>
         </div>
-    </div>
       </div>
-      <div class="col-12-sm col-md-8">
-        <div class="card">
-          <div class="card-header bg-dark active"><h5>Article rapide</h5></div>
-      <div class="card-body">
-        <form method="POST" action="addArticle.php">
-        <div class="form-group">
-            <label for="exampleInputEmail1">Titre de l'article</label>
-            <input type="text" class="form-control" id="title" name="title" aria-describedby="title" placeholder="Titre">
+      <div class="card">
+        <div class="card-header bg-dark">
+          <h5>Actions rapides</h5>
         </div>
-        <div class="form-group">
-            <label for="categorie">Catégorie de l'article</label>
-            <select class="form-control" id="categorie" name="categorie">
-                <?php foreach($categories as $categorie):?>
-                <option value="<?=$categorie['c_id']?>">
-                    <?php for($i=0;$i<=$categorie['level'];$i++):?>&nbsp;<?php endfor;?>
-                    <?=$categorie['c_title']?>
-                </option>
-                <?php endforeach;?>
-            </select>
-            <small id="catHelp" class="form-text text-muted">Sélectionnez une catégorie pour l'article</small>
+        <div class="card-body">
+          <a href="addArticle.php" class="d-block card-link"><i class="icon-file-plus"></i> Ajouter un article</a>
+          <a href="addCategory.php" class="d-block card-link"><i class="icon-plus-square"></i> Ajouter une catégorie</a>
+          <a href="addUser.php" class="d-block card-link"><i class="icon-user-plus"></i> Ajouter un utilisateur</a>
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Texte de l'article</label>
-            <textarea class="form-control" aria-label="corps_text" name="content" row="3"></textarea>
-        </div>
-        <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" name="valide" checked=""  id="valide">
-                <label class="custom-control-label" for="valide">Publier l'article</label>
-                <small id="publieHelp" class="form-text text-muted">L'article sera mis en brouillon si vous décochez cette case !</small>
-        </div>
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </form>
       </div>
     </div>
-  </div>
-    
+    <div class="col-12-sm col-md-8">
+      <div class="card">
+        <div class="card-header bg-dark active">
+          <h5>Article rapide</h5>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="addArticle.php">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Titre de l'article</label>
+              <input type="text" class="form-control" id="title" name="title" aria-describedby="title" placeholder="Titre">
+            </div>
+            <div class="form-group">
+              <label for="categorie">Catégorie de l'article</label>
+              <select class="form-control" id="categorie" name="categorie">
+                <?php foreach ($categories as $categorie) : ?>
+                  <option value="<?= $categorie['cat_id'] ?>">
+                    <?php for ($i = 0; $i <= $categorie['level']; $i++) : ?>&nbsp;<?php endfor; ?>
+                    <?= $categorie['cat_title'] ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+              <small id="catHelp" class="form-text text-muted">Sélectionnez une catégorie pour l'article</small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Texte de l'article</label>
+              <textarea class="form-control" aria-label="corps_text" name="content" row="3"></textarea>
+            </div>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" name="valide" checked="" id="valide">
+              <label class="custom-control-label" for="valide">Publier l'article</label>
+              <small id="publieHelp" class="form-text text-muted">L'article sera mis en brouillon si vous décochez cette case !</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div class="row">
     <div class="col-12 col-md-7">
-        <ul class="list-group">
-          <li class="list-group-item active bg-dark">
-            <h5>Liste des derniers articles</h5>
+      <ul class="list-group">
+        <li class="list-group-item active bg-dark">
+          <h5>Liste des derniers articles</h5>
+        </li>
+        <?php foreach ($articles as $article) : ?>
+          <li class="list-group-item">
+            <h6><span class="d-none"><?= $article['art_valide'] ?></span><a href="publishArticle.php?id=<?= $article['art_id'] ?>"><i class="big <?php if ($article['art_valide'] == true) : ?>green icon-toggle-right<?php else : ?>red icon-toggle-left<?php endif; ?>"></i></a> <?= $article['art_title'] ?> <span class="badge badge-pill badge-success"><?= $article['cat_title'] ?></span></h6>
+            <footer class="blockquote-footer">Auteur : <cite title="Source Title"><?= $article['use_firstname'] . ' ' . $article['use_lastname'] ?></cite></footer>
           </li>
-          <?php foreach ($articles as $article):?>
-            <li class="list-group-item">
-                <h6><span class="d-none"><?=$article['a_valide']?></span><a href="publishArticle.php?id=<?=$article['a_id']?>"><i class="big <?php if ($article['a_valide']==true):?>green icon-toggle-right<?php else:?>red icon-toggle-left<?php endif;?>"></i></a> <?=$article['a_title']?> <span class="badge badge-pill badge-success"><?=$article['c_title']?></span></h6>
-                <footer class="blockquote-footer">Auteur : <cite title="Source Title"><?=$article['u_firstname'].' '.$article['u_lastname']?></cite></footer>
-            </li> 
-          <?php endforeach;?>
-        </ul>
-        <a href="listeArticle.php">Voir tous les articles</a>
+        <?php endforeach; ?>
+      </ul>
+      <a href="listeArticle.php">Voir tous les articles</a>
     </div>
     <div class="col-12 col-md-5">
-        <ul class="list-group">
-          <li class="list-group-item bg-dark active">
-            <h5>Liste des derniers commentaires</h5>
-          </li>
+      <ul class="list-group">
+        <li class="list-group-item bg-dark active">
+          <h5>Liste des derniers commentaires</h5>
+        </li>
+        <?php foreach ($comments as $comment) : ?>
           <li class="list-group-item">
-              <blockquote class="blockquote text-right">
-                  <p class="mb-0">Lorem ipsum dolor sit amet, consectetur (...)</p>
-                  <footer class="blockquote-footer">De <cite title="Source Title">Jean Bob</cite></footer>
-              </blockquote>
+            <p class="mb-0"><span class="d-none"><?= $comment['com_valide'] ?></span><a href="publishComment.php?id=<?= $comment['com_id'] ?>"><i class="big <?php if ($comment['com_valide'] == true) : ?>green icon-toggle-right<?php else : ?>red icon-toggle-left<?php endif; ?>"></i></a> <?= $comment['com_content'] ?><span class="badge badge-pill badge-success"><?= $article['art_title'] ?></span></p>
+            <footer class="blockquote-footer">De <cite title="Source Title"><?= $comment['com_pseudo'] ?></cite></footer>
           </li>
-          <li class="list-group-item">
-            <blockquote class="blockquote text-right">
-                  <p class="mb-0">Lorem ipsum dolor sit amet, consectetur (...)</p>
-                  <footer class="blockquote-footer">De <cite title="Source Title">Jean Karime</cite></footer>
-              </blockquote>
-          </li>
-          <li class="list-group-item">
-              <blockquote class="blockquote text-right">
-                  <p class="mb-0">Lorem ipsum dolor sit amet, consectetur (...)</p>
-                  <footer class="blockquote-footer">De <cite title="Source Title">Jean Fred</cite></footer>
-              </blockquote>
-          </li>
-          <li class="list-group-item">
-            <blockquote class="blockquote text-right">
-                  <p class="mb-0">Lorem ipsum dolor sit amet, consectetur (...)</p>
-                  <footer class="blockquote-footer">De <cite title="Source Title">Jeanne Sabine</cite></footer>
-              </blockquote>
-          </li>
-        </ul>
-        <a href="listeComment.php">Voir tous les commentaires</a>
+        <?php endforeach; ?>
+      </ul>
+      <a href="listeComment.php">Voir tous les commentaires</a>
     </div>
   </div>

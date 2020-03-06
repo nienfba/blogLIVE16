@@ -24,7 +24,7 @@ try
         $id = $_GET['id'];
 
         $bdd = connexion();
-        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'user WHERE u_id = :id');
+        $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'user WHERE use_id = :id');
         $sth->execute(['id'=>$id]);
         $user = $sth->fetch(PDO::FETCH_ASSOC);
 
@@ -33,19 +33,17 @@ try
             //on a bien un utilisateur en base avec cet id
             //On vérifie si l'utilisateur n'a pas d'articles associé !
             //Sinon on empêche sa 
-            $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE a_author = :id');
+            $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article WHERE art_author = :id');
             $sth->execute(['id'=>$id]);
 
             if($sth->fetchColumn() > 0)
             {
                 addFlashBag('L\'utilisateur a des articles associé. Il ne peut pas être supprimé !','warning');
-                addFlashBag('Youpi!','danger');
-                addFlashBag('Hello wolrd !');
             }
             else
             {
                 //On supprime l'article
-                $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'user WHERE u_id = :id');
+                $sth = $bdd->prepare('DELETE FROM '.DB_PREFIXE.'user WHERE use_id = :id');
                 $sth->execute(['id'=>$id]);
 
                 addFlashBag('L\'utilisateur a bien été supprimé');
@@ -64,7 +62,7 @@ try
 }
 catch(PDOException $e)
 {
-    $vue = 'erreur.phtml';
+    $vue = 'erreur';
     //Si une exception est envoyée par PDO (exemple : serveur de BDD innaccessible) on arrive ici
     $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }

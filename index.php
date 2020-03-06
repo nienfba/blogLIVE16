@@ -14,9 +14,12 @@ $bgImage = 'img/home-bg.jpg';
 try
 {
     $bdd = connexion();
-    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article INNER JOIN '.DB_PREFIXE.'user ON a_author=u_id LEFT JOIN '.DB_PREFIXE.'categorie ON a_categorie=c_id WHERE a_valide=1');
+    
+    /** Récupération des derniers articles et le nombre de commentaire associés */
+    $sth = $bdd->prepare('SELECT * FROM '.DB_PREFIXE.'article 
+                        INNER JOIN '.DB_PREFIXE.'user ON art_author=use_id 
+                        LEFT JOIN '.DB_PREFIXE.'categorie ON art_categorie=cat_id WHERE art_valide=1');
     $sth->execute();
-   
     $articles = $sth->fetchAll(PDO::FETCH_ASSOC);
 }
 catch(PDOException $e)

@@ -9,7 +9,7 @@ include('../lib/app.lib.php');
 userIsConnected();
 
 /** On définie nos variables nécessaire pour la vue et le layout */
-$vue = 'addCategory.phtml';      //vue qui sera affichée dans le layout
+$vue = 'category/add';      //vue qui sera affichée dans le layout
 $title = 'Ajouter une catégorie';  //titre de la page qui sera mis dans title et h1 dans le layout
 $menuSelected = 'addCategory';   //menu qui sera sélect dans la nav du layout
 
@@ -54,7 +54,7 @@ try
         {
             //Préparation requête
             $sth = $bdd->prepare('INSERT INTO '.DB_PREFIXE.'categorie 
-            (c_id,c_title,c_parent)
+            (cat_id,cat_title,cat_parent)
             VALUES (NULL,:title,:parent)');
 
             //Liage (bind) des valeurs
@@ -73,8 +73,8 @@ try
 }
 catch(PDOException $e)
 {
-    $vue = 'erreur.phtml';
-    $errorForm[] = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
+    $vue = 'erreur';
+    $messageErreur = 'Une erreur de connexion a eu lieu :'.$e->getMessage();
 }
 
 include('tpl/layout.phtml');

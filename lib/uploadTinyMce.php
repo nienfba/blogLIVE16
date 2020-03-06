@@ -1,4 +1,6 @@
 <?php
+/** Fichier fourni par TinyMCE pour gérer l'UPLOAD à partir de l'éditeur TinyMCE */
+
 include('../config/config.php');
 
   /***************************************************
